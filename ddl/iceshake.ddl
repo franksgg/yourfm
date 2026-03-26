@@ -1690,7 +1690,7 @@ INSERT INTO SYSDATA (
 	16429,
 	NULL,
 	0,
-	true,
+	false,
 	5,
 	'192.168.178.201:weather',
 	'192.168.178.201:strom',
