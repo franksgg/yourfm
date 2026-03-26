@@ -1,0 +1,58 @@
+services:
+  firebird:
+    image: firebirdsql/firebird
+    restart: always
+    environment:
+      - FIREBIRD_ROOT_PASSWORD=masterkey
+      - FIREBIRD_USER=shiva
+      - FIREBIRD_PASSWORD=shiva
+      - FIREBIRD_DATABASE=iceshake.fdb
+      - FIREBIRD_DATABASE_DEFAULT_CHARSET=UTF8
+      ##- FIREBIRD_CONF_DataTypeCompatibility=3.0
+
+    volumes:
+      - ./data:/var/lib/firebird/data
+      - ./ddl:/docker-entrypoint-initdb.d/
+      - opt-volume:/opt
+    ports:
+      - "30050:3050"
+
+  icecast:
+    build: ./icecast-kh-docker
+    container_name: icecast-fsg
+    volumes:
+      - ./icecast-kh-docker/config:/home/icecast/config
+      - ./icecast-kh-docker/log:/home/icecast/log
+      - ./icecast-kh-docker/docker-entrypoint.sh:/home/icecast/docker-entrypoint.sh
+    restart: unless-stopped
+    environment:
+      - IC_LOCATION=Germany
+      # - IC_ADMIN_EMAIL=
+      # - IC_MAX_LISTENERS=
+      # - IC_MAX_SOURCES=
+      - IC_SOURCE_PASSWORD=hackme
+      # - IC_RELAY_PASSWORD=
+      - IC_ADMIN_PASSWORD=hackme
+      - IC_HOSTNAME=localhost
+      # - IC_MOUNT_PASSWORD=
+      #- IC_RELAY_SERVER=stream.urdt.lv
+    entrypoint: /home/icecast/docker-entrypoint.sh
+    command: "-c /home/icecast/config/icecast.xml"
+    ports:
+      - "8000:8000"
+
+
+  indexer:
+    build:
+      context: ./indexer
+      dockerfile: dockerfile-python
+    volumes:
+       - ./data:/var/lib/firebird/data
+       - /var/data/music:/var/data/music
+       - opt-volume:/opt
+    command: sh -c "python indexmedia.py && exec ./ices -c /var/lib/firebird/data/ices.conf"
+
+
+volumes:   # add this section
+  opt-volume:    # does not need anything underneath this
+
