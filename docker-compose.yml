@@ -49,8 +49,10 @@ services:
     volumes:
        - ./data:/var/lib/firebird/data
        - /var/data/music:/var/data/music
+       - ./indexer:/home/shiva/bin
        - opt-volume:/opt
-    command: sh -c "python indexmedia.py && exec ./ices -c /var/lib/firebird/data/ices.conf"
+    #command: sh -c "cp ices /home/shiva/bin && tail -f /dev/null"
+    command: sh -c "python3 indexmedia.py && exec ./ices -c /var/lib/firebird/data/ices.conf"
 
 
 volumes:   # add this section

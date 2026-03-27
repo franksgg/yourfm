@@ -27,12 +27,22 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
 
 - **Docker** and **Docker Compose**.
 - A music library located on the host (defaults to `/var/data/music`).
-- (Optional) API keys for Discogs and Last.fm for enhanced metadata indexing.
+- An API key for Discogs for enhanced metadata indexing.
+
+## Downloading
+1. git clone https://github.com/yourfm/yourfm.git
+2. cd yourfm
+3. git submodule update --init --recursive
+
 
 ## Setup & Run
 
 1.  **Configure the environment**:
-    - Copy `data/iceshake.ini.dist` to `data/iceshake.ini` and review and update paths or API keys if necessary.
+    - Rename or copy `data/iceshake.ini.dist` to `data/iceshake.ini` 
+    - Rename or copy `ddl/iceshake.ddl` to `ddl/iceshake.sql`
+    - Review and update paths in iceshake.ini and add your Discogs API key.
+    - (Optional) add or change the iusers entries at the end of 'ddl/iceshake.sql' (these are the users that will be allowed to access the web interface).
+       Users with the 'iadmin' flag set to 1 will be able to control playback via the web interface.   
     - Ensure your music library is available at `/var/data/music` or update the volume mapping in `docker-compose.yml`.
 
 2.  **Start the services**:
@@ -71,7 +81,7 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
   - `basedir`: Root of the music library.
   - `dirs`: Subdirectories to scan.
   - `discogs`: API key for Discogs.
-  - `LASTFM_API_KEY`: API key for Last.fm.
+  
 
 ## Tests
 
