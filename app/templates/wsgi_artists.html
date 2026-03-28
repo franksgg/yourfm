@@ -1,0 +1,105 @@
+$def with (artists, header)
+    <head>
+        <title>$header</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link href="/static/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="container-wide">
+            <h1 class="navy">$header</h1>
+            <div class="navigation">
+                <a href="../edit/" class="button-link">Back to Home</a>
+            </div>
+            <div class="search-box">
+                <input type="text" id="artistSearch" placeholder="Search for artists..." onkeyup="filterArtists()">
+                <button onclick="clearSearch()">Clear</button>
+            </div>
+
+            <div class="alphabet-nav">
+                <a href="#" onclick="filterByLetter('All')" class="active">All</a>
+                $for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+                    <a href="#" onclick="filterByLetter('$letter')">$letter</a>
+            </div>
+
+            <div class="artists-grid" id="artistsGrid">
+                $for artist in artists:
+                    <div class="card artist-card" data-name="$artist['NAME'].upper()">
+                        <div class="card-name">$artist['NAME']</div>
+                        $if artist.get('FK_IMAGE'):
+                            <a target="_blank" href="/image/$artist['FK_IMAGE']" class="jpc-link" data-tooltip="open image" >image</a>
+                        $else:
+                            <div class="no-image">No Image</div>
+                        <div class="card-actions">
+                            <a href="artist/$artist['ID']" class="button-link button-link-small">View</a>
+                            <a href="artist/edit/$artist['ID']" class="button-link button-link-small">Edit</a>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="navigation">
+                <a href="../edit/" class="button-link">Back to Home</a>
+            </div>
+        </div>
+
+        <script>
+            function filterArtists() {
+                var input = document.getElementById("artistSearch");
+                var filter = input.value.toUpperCase();
+                var grid = document.getElementById("artistsGrid");
+                var cards = grid.getElementsByClassName("artist-card");
+
+                // Reset active letter in alphabet navigation
+                var links = document.querySelectorAll(".alphabet-nav a");
+                for (var i = 0; i < links.length; i++) {
+                    links[i].classList.remove("active");
+                    if (links[i].textContent === "All") {
+                        links[i].classList.add("active");
+                    }
+                }
+
+                // Filter cards
+                for (var i = 0; i < cards.length; i++) {
+                    var name = cards[i].getAttribute("data-name");
+                    if (name.indexOf(filter) > -1) {
+                        cards[i].style.display = "";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
+                }
+            }
+
+            function filterByLetter(letter) {
+                var grid = document.getElementById("artistsGrid");
+                var cards = grid.getElementsByClassName("artist-card");
+
+                // Reset search box
+                document.getElementById("artistSearch").value = "";
+
+                // Update active letter
+                var links = document.querySelectorAll(".alphabet-nav a");
+                for (var i = 0; i < links.length; i++) {
+                    links[i].classList.remove("active");
+                    if (links[i].textContent === letter) {
+                        links[i].classList.add("active");
+                    }
+                }
+
+                // Filter cards
+                for (var i = 0; i < cards.length; i++) {
+                    var name = cards[i].getAttribute("data-name");
+                    if (letter === "All") {
+                        cards[i].style.display = "";
+                    } else if (name.startsWith(letter)) {
+                        cards[i].style.display = "";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
+                }
+            }
+
+            function clearSearch() {
+                document.getElementById("artistSearch").value = "";
+                filterByLetter("All");
+            }
+        </script>
+    </body>

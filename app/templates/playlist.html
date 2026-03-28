@@ -1,0 +1,29 @@
+$def with (list,header)
+<head>
+    <title>$header</title>
+    <meta http-equiv="refresh" content="10">
+    <meta name="robots" content="noindex, nofollow"/>
+    <link href="./static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<p><a href="index">Back</a></p>
+<div id="small">
+    <table border="1">
+
+        <tr>
+            <th align="left">Aktuell</th>
+            <th align="left">Artist</th>
+            <th align="left">Title</th>
+            <th align="left">Album</th>
+        </tr>
+        $for entry in list:
+        <tr>
+            <td> <span class="highlight-tomato">$entry[0]</span></td>
+            <td><a target="_blank" href="https://en.wikipedia.org/wiki/$entry[2]" data-tooltip="Search artist info in wikipedia.">$entry[2]</a></td>
+            <td><a target="_blank" href="https://genius.com/search?q=$entry[2] $entry[3]" data-tooltip="Search lyrics on genius.">$entry[3]</a></td>
+            <td><a target="_blank" href="https://www.jpc.de/s/$entry[5]" data-tooltip="Order album from jpc.">$entry[4]</a></td>
+        </tr>
+    </table>
+</div>
+</body>

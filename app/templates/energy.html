@@ -1,0 +1,137 @@
+$def with (header, json_data, form, start_date, end_date)
+<head>
+    <title>$header</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link href="static/style.css" rel="stylesheet" type="text/css">
+    <script src="static/jquery.min.js"></script>
+    <script src="static/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Energy Consumption and Production Graph</h1>
+
+        <!-- Date Range Selection Form -->
+        <form class="date-range-form" method="post">
+            <div class="date-field">
+                <label for="start_date">Start Time:</label>
+                <input type="datetime-local" id="start_date" name="start_date" value="$start_date" required>
+            </div>
+
+            <div class="date-field">
+                <label for="end_date">End Time:</label>
+                <input type="datetime-local" id="end_date" name="end_date" value="$end_date" required>
+            </div>
+
+            <button type="submit" class="update-button">Update</button>
+
+            <div class="date-range-info">
+                Showing data from $start_date.replace('T', ' ') to $end_date.replace('T', ' ')
+            </div>
+        </form>
+
+        <!-- Chart Container -->
+        <div class="chart-container-small">
+            <canvas id="energyChart"></canvas>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <a href="/index" class="button">Back to Home</a>
+        </div>
+
+        <script>
+            // Parse the energy data passed from the server
+            var energyData = $:json_data;
+
+            // Prepare data for Chart.js
+            var timestamps = [];
+            var consumption = [];
+            var production = [];
+
+            // Process the data
+            for (var i = 0; i < energyData.length; i++) {
+                timestamps.push(energyData[i].ts);
+                consumption.push(energyData[i].wh);
+                production.push(energyData[i].production);
+            }
+
+            // Create the chart
+            var ctx = document.getElementById('energyChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timestamps,
+                    datasets: [
+                        {
+                            label: 'Energy Consumption (Wh)',
+                            data: consumption,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            pointRadius: 0,
+                            tension: 0.4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Energy Production (W)',
+                            data: production,
+                            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            borderWidth: 1,
+                            pointRadius: 0,
+                            tension: 0.4,
+                            yAxisID: 'y'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Energy Consumption and Production Over Time (Common Scale)'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time'
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Energy (Wh/W)'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Form validation
+            document.querySelector('form').addEventListener('submit', function(e) {
+                var startDate = new Date(document.getElementById('start_date').value);
+                var endDate = new Date(document.getElementById('end_date').value);
+
+                if (startDate > endDate) {
+                    e.preventDefault();
+                    alert('Start date must be before end date');
+                }
+            });
+        </script>
+    </div>
+</body>

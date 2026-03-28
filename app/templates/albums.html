@@ -1,0 +1,123 @@
+$def with (menu, header, letters, albums_data)
+    <head>
+        <title>$header</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link href="static/style.css" rel="stylesheet" type="text/css">
+    </head>
+
+<body>
+<div class="split">
+    <div class="left">
+        <h1>$header</h1>
+        <p><a href="index">Back</a></p>
+        <div class="search-box">
+            <input type="text" id="albumSearch" placeholder="Search for albums..." onkeyup="filterAlbums()">
+            <button onclick="clearSearch()">Clear</button>
+        </div>
+
+        <div class="alphabet-nav">
+            $for letter in letters:
+                <a href="#" onclick="filterByLetter('$letter')">$letter</a>
+        </div>
+
+        <form name="main" method="post" id="albumForm"> 
+            $if not menu.valid: <p class="error">Try again, AmeriCAN:</p>
+
+            <div class="album-list" id="albumListContainer">
+                $:menu.render()
+            </div>
+
+            <div class="submit-btn">
+                <input type="submit" value="Play Selected Album" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function filterAlbums() {
+    var input = document.getElementById("albumSearch");
+    var filter = input.value.toUpperCase();
+    var select = document.querySelector("select");
+    var options = select.options;
+    var found = false;
+
+    // Reset active letter in alphabet navigation
+    var links = document.querySelectorAll(".alphabet-nav a");
+    for (var i = 0; i < links.length; i++) {
+        links[i].classList.remove("active");
+        if (links[i].textContent === "All") {
+            links[i].classList.add("active");
+        }
+    }
+
+    // Filter options
+    for (var i = 0; i < options.length; i++) {
+        var txtValue = options[i].text;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            options[i].style.display = "";
+            found = true;
+        } else {
+            options[i].style.display = "none";
+        }
+    }
+
+    // If albums found, select the first visible option
+    if (found && options.length > 0) {
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].style.display !== "none") {
+                options[i].selected = true;
+                break;
+            }
+        }
+    }
+}
+
+function filterByLetter(letter) {
+    var select = document.querySelector("select");
+    var options = select.options;
+    var found = false;
+
+    // Reset search box
+    document.getElementById("albumSearch").value = "";
+
+    // Update active letter
+    var links = document.querySelectorAll(".alphabet-nav a");
+    for (var i = 0; i < links.length; i++) {
+        links[i].classList.remove("active");
+        if (links[i].textContent === letter) {
+            links[i].classList.add("active");
+        }
+    }
+
+    // Filter options
+    for (var i = 0; i < options.length; i++) {
+        var txtValue = options[i].text;
+        if (letter === "All") {
+            options[i].style.display = "";
+            found = true;
+        } else if (txtValue.toUpperCase().startsWith(letter)) {
+            options[i].style.display = "";
+            found = true;
+        } else {
+            options[i].style.display = "none";
+        }
+    }
+
+    // If albums found, select the first visible option
+    if (found && options.length > 0) {
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].style.display !== "none") {
+                options[i].selected = true;
+                break;
+            }
+        }
+    }
+}
+
+function clearSearch() {
+    document.getElementById("albumSearch").value = "";
+    filterByLetter("All");
+}
+</script>
+</body>

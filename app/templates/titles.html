@@ -1,0 +1,123 @@
+$def with (menu, header, letters, titles_data)
+    <head>
+        <title>$header</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link href="static/style.css" rel="stylesheet" type="text/css">
+    </head>
+
+<body>
+<div class="split">
+    <div class="left">
+        <h1>$header</h1>
+        <p><a href="index">Back</a></p>
+        <div class="search-box">
+            <input type="text" id="titleSearch" placeholder="Search for titles..." onkeyup="filterTitles()">
+            <button onclick="clearSearch()">Clear</button>
+        </div>
+
+        <div class="alphabet-nav">
+            $for letter in letters:
+                <a href="#" onclick="filterByLetter('$letter')">$letter</a>
+        </div>
+
+        <form name="main" method="post" id="titleForm"> 
+            $if not menu.valid: <p class="error">Try again, AmeriCAN:</p>
+
+            <div class="title-list" id="titleListContainer">
+                $:menu.render()
+            </div>
+
+            <div class="submit-btn">
+                <input type="submit" value="Play Selected Title" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function filterTitles() {
+    var input = document.getElementById("titleSearch");
+    var filter = input.value.toUpperCase();
+    var select = document.querySelector("select");
+    var options = select.options;
+    var found = false;
+
+    // Reset active letter in alphabet navigation
+    var links = document.querySelectorAll(".alphabet-nav a");
+    for (var i = 0; i < links.length; i++) {
+        links[i].classList.remove("active");
+        if (links[i].textContent === "All") {
+            links[i].classList.add("active");
+        }
+    }
+
+    // Filter options
+    for (var i = 0; i < options.length; i++) {
+        var txtValue = options[i].text;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            options[i].style.display = "";
+            found = true;
+        } else {
+            options[i].style.display = "none";
+        }
+    }
+
+    // If titles found, select the first visible option
+    if (found && options.length > 0) {
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].style.display !== "none") {
+                options[i].selected = true;
+                break;
+            }
+        }
+    }
+}
+
+function filterByLetter(letter) {
+    var select = document.querySelector("select");
+    var options = select.options;
+    var found = false;
+
+    // Reset search box
+    document.getElementById("titleSearch").value = "";
+
+    // Update active letter
+    var links = document.querySelectorAll(".alphabet-nav a");
+    for (var i = 0; i < links.length; i++) {
+        links[i].classList.remove("active");
+        if (links[i].textContent === letter) {
+            links[i].classList.add("active");
+        }
+    }
+
+    // Filter options
+    for (var i = 0; i < options.length; i++) {
+        var txtValue = options[i].text;
+        if (letter === "All") {
+            options[i].style.display = "";
+            found = true;
+        } else if (txtValue.toUpperCase().startsWith(letter)) {
+            options[i].style.display = "";
+            found = true;
+        } else {
+            options[i].style.display = "none";
+        }
+    }
+
+    // If titles found, select the first visible option
+    if (found && options.length > 0) {
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].style.display !== "none") {
+                options[i].selected = true;
+                break;
+            }
+        }
+    }
+}
+
+function clearSearch() {
+    document.getElementById("titleSearch").value = "";
+    filterByLetter("All");
+}
+</script>
+</body>

@@ -49,11 +49,34 @@ services:
     volumes:
        - ./data:/var/lib/firebird/data
        - /var/data/music:/var/data/music
-       - ./indexer:/home/shiva/bin
+       - ./app:/home/shiva/bin
        - opt-volume:/opt
-    #command: sh -c "cp ices /home/shiva/bin && tail -f /dev/null"
-    command: sh -c "python3 indexmedia.py && exec ./ices -c /var/lib/firebird/data/ices.conf"
+    command: sh -c "python3 indexmedia.py"
+    #command: sh -c "python3 indexmedia.py && exec ./ices -c /var/lib/firebird/data/ices.conf"
 
+  proxy:
+    image: nginx
+    volumes:
+      - type: bind
+        source: ./nginx/nginx.conf
+        target: /etc/nginx/conf.d/default.conf
+        read_only: true
+    ports:
+      - "8090:80"
+    depends_on:
+      - app
+  app:
+    build: ./app
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - ./data:/var/lib/firebird/data
+      - /var/data/music:/var/data/music
+      - ./app:/home/shiva/bin
+      - ./indexer:/home/shiva/bin/indexer
+      - opt-volume:/opt
+    command: sh -c "./ices -c /var/lib/firebird/data/ices.conf && python main.py && tail -f /dev/null"
 
 volumes:   # add this section
   opt-volume:    # does not need anything underneath this

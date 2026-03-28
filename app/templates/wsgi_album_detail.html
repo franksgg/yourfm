@@ -1,0 +1,71 @@
+$def with (album, image, tracks, header)
+    <head>
+        <title>$header</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link href="/static/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="container-medium">
+            <h1 class="navy">$header</h1>
+
+            <div class="details-view">
+                <div class="details-image-container">
+                    $if image:
+                        <img src="$image" alt="$album['NAME']" class="details-image">
+                    $else:
+                        <div class="no-image no-image-large">No Image Available</div>
+
+                    <div class="details-actions">
+                        <a href="/edit/album/edit/$album['ID']" class="button-link">Edit Album</a>
+                        <a href="/edit/album/image/$album['ID']" class="button-link">Manage Image</a>
+                    </div>
+                </div>
+
+                <div class="details-info">
+                    <div class="info-row">
+                        <div class="info-label">Album Name:</div>
+                        <div class="info-value">$album['NAME']</div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-label">Artist:</div>
+                        <div class="info-value">$album['ARTIST']</div>
+                    </div>
+
+                    $if album.get('PYEAR'):
+                        <div class="info-row">
+                            <div class="info-label">Year:</div>
+                            <div class="info-value">$album['PYEAR']</div>
+                        </div>
+
+                    <div class="info-row">
+                        <div class="info-label">Number of Tracks:</div>
+                        <div class="info-value">${len(tracks) if tracks else 0}</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="sub-heading mt-30">Tracks</h2>
+            <div class="list-container">
+                $if tracks and len(tracks) > 0:
+                    $for track in tracks:
+                        <div class="list-item">
+                            <div class="list-item-info">
+                                <span class="list-item-title">$track['TITLE']</span>
+                                $if track.get('PYEAR'):
+                                    <span class="list-item-meta">($track['PYEAR'])</span>
+                                $if track.get('PATH'):
+                                    <span class="list-item-path">$track['PATH']</span>
+                            </div>
+                            <span class="list-item-meta">${"%d:%02d" % (track['LEN'] // 60, track['LEN'] % 60) if track.get('LEN') else "0:00"}</span>
+                        </div>
+                $else:
+                    <p>No tracks found for this album.</p>
+            </div>
+
+            <div class="navigation">
+                <a href="/edit/albums" class="button-link">Back to Albums</a>
+                <a href="/edit/" class="button-link">Back to Home</a>
+            </div>
+        </div>
+    </body>

@@ -1,0 +1,17 @@
+$def with (menu,header)
+    <head>
+        <title>$header</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link href="static/style.css" rel="stylesheet" type="text/css">
+    </head>
+   
+<body>
+
+<form name="main" method="post"> 
+$if not menu.valid: <p class="error">Try again, AmeriCAN:</p>
+$:menu.render()
+<br />
+<input type="submit" />   
+</form>
+
+</body>

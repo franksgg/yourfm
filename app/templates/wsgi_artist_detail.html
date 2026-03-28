@@ -1,0 +1,63 @@
+$def with (artist, image, albums, header)
+    <head>
+        <title>$header</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link href="/static/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="container-medium">
+            <h1 class="navy">$header</h1>
+
+            <div class="details-view">
+                <div class="details-image-container">
+                    $if image:
+                        <img src="$image" alt="$artist['NAME']" class="details-image">
+                    $else:
+                        <div class="no-image no-image-large">No Image Available</div>
+
+                    <div class="details-actions">
+                        <a href="/edit/artist/edit/$artist['ID']" class="button-link">Edit Artist</a>
+                        <a href="/edit/artist/image/$artist['ID']" class="button-link">Manage Image</a>
+                    </div>
+                </div>
+
+                <div class="details-info">
+                    <div class="info-row">
+                        <div class="info-label">Name:</div>
+                        <div class="info-value">$artist['NAME']</div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-label">ID:</div>
+                        <div class="info-value">$artist['ID']</div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-label">Number of Albums:</div>
+                        <div class="info-value">${len(albums) if albums else 0}</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="sub-heading mt-30">Albums</h2>
+            <div class="list-container">
+                $if albums and len(albums) > 0:
+                    $for album in albums:
+                        <div class="list-item">
+                            <div>
+                                <span class="list-item-title">$album['NAME']</span>
+                                $if album.get('PYEAR'):
+                                    <span class="list-item-meta">($album['PYEAR'])</span>
+                            </div>
+                            <a href="/edit/album/$album['ID']" class="button-link button-link-small">View</a>
+                        </div>
+                $else:
+                    <p>No albums found for this artist.</p>
+            </div>
+
+            <div class="navigation">
+                <a href="/edit/artists" class="button-link">Back to Artists</a>
+                <a href="/edit/" class="button-link">Back to Home</a>
+            </div>
+        </div>
+    </body>

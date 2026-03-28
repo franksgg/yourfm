@@ -1,0 +1,29 @@
+$def with (form, album, header)
+    <head>
+        <title>$header</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link href="/static/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="container-narrow">
+            <h1 class="navy">$header</h1>
+
+            <div class="form-container">
+                <form method="POST">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Album Name:</label>
+                        $:form.render_css()
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="form-submit" value="Save Changes">
+                    </div>
+                </form>
+            </div>
+
+            <div class="navigation">
+                <a href="/edit/album/$album['ID']" class="button-link">Cancel</a>
+                <a href="/edit/albums" class="button-link">Back to Albums</a>
+            </div>
+        </div>
+    </body>

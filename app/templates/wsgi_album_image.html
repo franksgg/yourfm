@@ -1,0 +1,54 @@
+$def with (album, header)
+    <head>
+        <title>$header</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link href="/static/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="container-narrow">
+            <h1 class="navy">$header</h1>
+
+            <div class="navigation" style="text-align: center; margin-bottom: 20px;">
+                <h2 class="sub-heading">Current Image</h2>
+                $if album.get('FK_IMAGE'):
+                    <img src="/image/$album['FK_IMAGE']" alt="$album['NAME']" class="details-image-centered">
+                $else:
+                    <div class="no-image">No Image Available</div>
+            </div>
+
+            <div class="form-container">
+                <h2 class="sub-heading">Upload New Image</h2>
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="form-label" for="image">Select Image File:</label>
+                        <input type="file" name="image" id="image" class="form-input" accept="image/*" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="form-submit" value="Upload Image">
+                    </div>
+                </form>
+            </div>
+
+            <div class="image-options">
+                <div class="image-option">
+                    <h3 class="sub-heading">Download Image from URL</h3>
+                    <p>Enter a URL to download an image for this album.</p>
+                    <form method="POST" action="/edit/album/image/url/$album['ID']">
+                        <div class="form-group">
+                            <label class="form-label" for="image_url">Image URL:</label>
+                            <input type="url" name="image_url" id="image_url" class="form-input" required placeholder="https://example.com/image.jpg">
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="form-submit" value="Download Image">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <a href="/edit/album/$album['ID']" class="button-link">Back to Album</a>
+                <a href="/edit/albums" class="button-link">Back to Albums</a>
+            </div>
+        </div>
+    </body>

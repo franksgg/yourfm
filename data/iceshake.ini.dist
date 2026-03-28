@@ -17,6 +17,7 @@ fb_library_name_w32: C:\Program Files\Firebird\Firebird_4_0\fbclient.dll
 url=http://localhost:8000/
 admin_user=admin
 admin_password=hackme
+private=False
 
 [Indexer]
 logfile=/var/data/music/indexer.log

@@ -1,0 +1,34 @@
+$def with (menu, sysmenu, header, admin)
+<head>
+    <title>$header</title>
+    <meta name="robots" content="noindex, nofollow"/>
+    <link href="./static/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<p><a href="index">Back</a></p>
+$if admin:
+    <div class="bsplit">
+        <div class="bleft" >
+            <h3>Music Control</h3>
+            <form name="main" method="post">
+                $if not menu.valid: <p class="error">Try again:</p>
+                <p class="full-width-padded">
+                    $:menu.render()
+                </p>
+                <input type="submit" value="Apply"/>
+            </form>
+        </div>
+        <div class="bright">
+            <h3>System Control</h3>
+            <form name="sys" method="post">
+                $if not sysmenu.valid: <p class="error">Try again:</p>
+                <p class="full-width-padded">
+                    $:sysmenu.render()
+                </p>
+                <input type="submit" value="Execute"/>
+            </form>
+        </div>
+    </div>
+$else:
+    <p>Access denied. Admin rights required.</p>
+</body>

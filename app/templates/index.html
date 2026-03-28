@@ -1,0 +1,139 @@
+$def with (header,artist,title,len,album,year,percent,acttime,imgblob,fbversion,iwidth,iheight,admin,weather,actdate,temp,hum,wind,sunrise,sunset,slink,jpclink,channel,elapsed,verbrauch,produktion,playlink)
+
+    <head>
+        <title>$header</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link href="./static/style.css" rel="stylesheet" type="text/css">
+        <script src="./static/jquery.min.js"></script>
+        <script type="text/javascript">
+           var retry_current = 8, 
+           retry_max = 32,
+           check_response = function() {
+           $$.ajax(
+	   {
+	       url: window.location.href,
+	       type: "HEAD",
+	       complete: function (jqXHR) {
+	       switch (jqXHR.status) {
+	          case 200:
+	              console.log('got 200');
+                      window.location.assign('index');
+	              break;
+	          default:
+	              console.log('retry');
+                      if(retry_current < retry_max) {
+	                  retry_current *= 2;
+	              }
+	              console.log('and again');
+                      console.log('retry_current: '+retry_current);
+                      setTimeout(check_response, retry_current * 1000);
+	      }
+	  }
+          });
+      };
+    console.log('calling setTimeout');
+    console.log('retry_current: '+retry_current);
+    setTimeout(check_response, retry_current * 1000);
+    </script>
+
+    </head>
+
+<body onload="setTimeout(5000)">
+<div class="split">
+<div class="left">
+<a data-tooltip="Playing on Denon" class="channel"> $channel</a>
+<br />
+<br />
+<a target="_blank" href="https://en.wikipedia.org/wiki/$artist" data-tooltip="Search artist info in wikipedia.">$artist</a>
+<br />
+<a target="_blank" href="https://genius.com/search?q=$slink" data-tooltip="Search lyrics on genius.">$title</a>
+<br />
+(<a href="https://www.jpc.de/s/$jpclink" class="jpc-link" target="_blank" data-tooltip="Order album from jpc.">$album</a> - $year)
+ <br />
+<span class="font-small">
+ $elapsed
+<progress value="$percent" max="100">$percent%</progress>
+ $len
+</span>
+
+<br />
+<table class="tg" width="100%">
+    <col class="w40">
+	<col class="w20">
+	<col class="w20">
+    <col class="w20">
+<tbody>
+$if weather:
+  <tr>
+    <td class="tg-r0vp">$actdate<br></td>
+    <td class="tg-r0vp"></td>
+    <td class="tg-r0vp">$temp&#176;C</td>
+    <td class="tg-r0vp">$hum%</td>
+  </tr>
+  <tr>
+    <td class="tg-r0vp">$acttime</td>
+    <td class="tg-r0vp"></td>
+    <td class="tg-r0vp">Windst.</td>
+    <td class="tg-r0vp">$wind</td>
+  </tr>
+
+$else:
+    <tr><td class="tg-r0vp">$actdate<br></td></tr>
+    <tr><td class="tg-r0vp">$acttime</td></tr>
+
+</tbody>
+</table>
+
+<br />
+
+</div>
+<div class="right">
+
+        <img width=$iwidth  src="$imgblob">
+        <br />
+        $if weather:
+            <table>
+
+            <tbody>
+            <tr>
+                <td class="table-column"><div class="item">$verbrauch</div></td>
+                <td class="table-column"><div class="item">   </div></td>
+                <td class="table-column"><div class="item">&#127749;</div></td>
+                <td class="table-column"><div class="item">$sunrise</div></td>
+            </tr>
+            <tr>
+                <td class="table-column"><div ><a target="_blank" href="http://192.168.178.116/index_cn.html" class="wattage" data-tooltip="Show info for solar panels."> $produktion</a></div></td>
+                <td class="table-column"><div class="item">   </div></td>
+                <td class="table-column"><div class="item">&#x1F307;</div></td>
+                <td class="table-column"><div class="item">$sunset </div></td>
+            </tr>
+            </tbody>
+            </table>
+    </div>
+</div>
+
+
+$if admin:
+    <p class="box">
+    <a data-tooltip="Show possible actions." href="controls" class="go">&#9784;</a>
+    <a data-tooltip="Play in Browser." target="_blank" href="$playlink" class="play"> &#x25BA;</a>
+    <a data-tooltip="Show playlist." target="_blank" href="playlist" class="go"> &sum; </a>
+    <a data-tooltip="Like title" href="plus" class="play" >+</a>
+    <a data-tooltip="Dislike title." href="minus" class="stop">-</a>
+    <a data-tooltip="Edit metadata." href="edit" class="go">  	&#9997;</a>
+
+    $if weather:
+        <a  target="_blank" href="energy" class="go" data-tooltip="Show energy graph.">&#9889;</a>
+        <a  target="_blank" href="weather" class="go" data-tooltip="Show weather graph." >&#9788;</a>
+    <br />
+    </p>
+$else:
+    <p class="box">
+    <a data-tooltip="Play in Browser." target="_blank" href="$playlink" class="play"> &#x25BA;</a>
+    <a data-tooltip="Show playlist." target="_blank" href="playlist" class="go"> &sum; </a>
+    <br />
+    </p>
+
+ $fbversion
+</body>
+

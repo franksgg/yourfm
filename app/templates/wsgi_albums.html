@@ -1,0 +1,110 @@
+$def with (albums, header)
+    <head>
+        <title>$header</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link href="/static/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="container-wide">
+            <h1 class="navy">$header</h1>
+            <div class="navigation">
+                <a href="/edit/" class="button-link">Back to Home</a>
+            </div>
+            <div class="search-box">
+                <input type="text" id="albumSearch" placeholder="Search for albums..." onkeyup="filterAlbums()">
+                <button onclick="clearSearch()">Clear</button>
+            </div>
+
+            <div class="alphabet-nav">
+                <a href="#" onclick="filterByLetter('All')" class="active">All</a>
+                $for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+                    <a href="#" onclick="filterByLetter('$letter')">$letter</a>
+            </div>
+
+            <div class="albums-grid" id="albumsGrid">
+                $for album in albums:
+                    <div class="card album-card" data-name="$album['NAME'].upper()" data-artist="$album['ARTIST'].upper()">
+                        <div class="card-name">$album['NAME']</div>
+                        <div class="card-artist">by $album['ARTIST']</div>
+                        $if album.get('PYEAR'):
+                            <div class="list-item-meta">($album['PYEAR'])</div>
+                        $if album.get('FK_IMAGE'):
+                           <a target="_blank" href="/image/$album['FK_IMAGE']" class="jpc-link" data-tooltip="open image" >cover</a>
+
+                        $else:
+                            <div class="no-image">No Image</div>
+                        <div class="card-actions">
+                            <a href="/edit/album/$album['ID']" class="button-link button-link-small">View</a>
+                            <a href="/edit/album/edit/$album['ID']" class="button-link button-link-small">Edit</a>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="navigation">
+                <a href="/edit/" class="button-link">Back to Home</a>
+            </div>
+        </div>
+
+        <script>
+            function filterAlbums() {
+                var input = document.getElementById("albumSearch");
+                var filter = input.value.toUpperCase();
+                var grid = document.getElementById("albumsGrid");
+                var cards = grid.getElementsByClassName("album-card");
+
+                // Reset active letter in alphabet navigation
+                var links = document.querySelectorAll(".alphabet-nav a");
+                for (var i = 0; i < links.length; i++) {
+                    links[i].classList.remove("active");
+                    if (links[i].textContent === "All") {
+                        links[i].classList.add("active");
+                    }
+                }
+
+                // Filter cards
+                for (var i = 0; i < cards.length; i++) {
+                    var name = cards[i].getAttribute("data-name");
+                    var artist = cards[i].getAttribute("data-artist");
+                    if (name.indexOf(filter) > -1 || artist.indexOf(filter) > -1) {
+                        cards[i].style.display = "";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
+                }
+            }
+
+            function filterByLetter(letter) {
+                var grid = document.getElementById("albumsGrid");
+                var cards = grid.getElementsByClassName("album-card");
+
+                // Reset search box
+                document.getElementById("albumSearch").value = "";
+
+                // Update active letter
+                var links = document.querySelectorAll(".alphabet-nav a");
+                for (var i = 0; i < links.length; i++) {
+                    links[i].classList.remove("active");
+                    if (links[i].textContent === letter) {
+                        links[i].classList.add("active");
+                    }
+                }
+
+                // Filter cards
+                for (var i = 0; i < cards.length; i++) {
+                    var name = cards[i].getAttribute("data-name");
+                    if (letter === "All") {
+                        cards[i].style.display = "";
+                    } else if (name.startsWith(letter)) {
+                        cards[i].style.display = "";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
+                }
+            }
+
+            function clearSearch() {
+                document.getElementById("albumSearch").value = "";
+                filterByLetter("All");
+            }
+        </script>
+    </body>
