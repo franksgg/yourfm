@@ -11,7 +11,7 @@ import indexer.tools as tools
 import data
 import edit
 import controls
-from app import ide_utils
+import ide_utils
 from indexer import indexmedia
 
 import web
