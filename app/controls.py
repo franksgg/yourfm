@@ -93,12 +93,12 @@ class controls(object):
         if debugging or session.get('admin', False):
             return self.display()
         else:
-            raise web.seeother('/login')
+            raise web.seeother('login')
 
     def POST(self):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
-        target = '/'
+            raise web.seeother('login')
+        target = 'index'
         i = web.input()
         try:
 
@@ -131,15 +131,15 @@ class controls(object):
                             self.sendrandom()
                             break
                         if case('search artist'):
-                            target='/artists'
+                            target='artists'
                             break
 
                         if case('search album'):
-                            target='/albums'
+                            target='albums'
                             break
 
                         if case('search title'):
-                            target='/titles'
+                            target='titles'
                             break
 
 
@@ -161,6 +161,6 @@ class controls(object):
         except Exception as e:
             if not f"{e}"=="303 See Other":
                 print(f"Error in controls POST: {e}")
-                target='/'
+                target='index'
         finally:
             web.seeother(target)

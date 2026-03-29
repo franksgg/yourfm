@@ -43,7 +43,7 @@ class edit_index:
 
     def GET(self):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         return render.wsgi_index(header="Album and Artist Management")
 
 
@@ -52,7 +52,7 @@ class edit_artists:
 
     def GET(self):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         # Get all artists from the database
         artists_data = []
         try:
@@ -70,7 +70,7 @@ class artist_detail:
 
     def GET(self, artist_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         # Get artist details
         try:
             query = "SELECT a.id, a.name, a.fk_image FROM artists a  where a.id = ?"
@@ -99,7 +99,7 @@ class artist_edit:
 
     def GET(self, artist_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         # Get artist details to pre-fill the form
         try:
             query = "SELECT a.id, a.name FROM artists a WHERE a.id = ?"
@@ -119,7 +119,7 @@ class artist_edit:
 
     def POST(self, artist_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         form_data = self.artist_form()
         if not form_data.validates():
             return "Form validation failed"
@@ -141,7 +141,7 @@ class artist_image:
 
     def GET(self, artist_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         # Get artist details
         try:
             query = "SELECT a.id, a.name, a.fk_image FROM artists a WHERE a.id = ?"
@@ -157,7 +157,7 @@ class artist_image:
 
     def POST(self, artist_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         # Handle image upload
         try:
             # Get artist details
@@ -197,7 +197,7 @@ class edit_albums:
 
     def GET(self):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         # Get all albums from the database
         albums_data = []
         try:
@@ -215,7 +215,7 @@ class album_detail:
 
     def GET(self, album_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         # Get album details
         try:
             query = "SELECT a.id, a.name, a.artist, a.pyear, a.fk_image FROM albums a WHERE a.id = ?"
@@ -251,7 +251,7 @@ class album_edit:
 
     def GET(self, album_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         # Get album details to pre-fill the form
         try:
             query = "SELECT a.id, a.name, a.artist FROM albums a WHERE a.id = ?"
@@ -271,7 +271,7 @@ class album_edit:
 
     def POST(self, album_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         form_data = self.album_form()
         if not form_data.validates():
             return "Form validation failed"
@@ -293,7 +293,7 @@ class album_image:
 
     def GET(self, album_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         # Get album details
         try:
             query = "SELECT a.id, a.name, a.artist, a.fk_image FROM albums a WHERE a.id = ?"
@@ -309,7 +309,7 @@ class album_image:
 
     def POST(self, album_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         # Handle image upload
         try:
             # Get album details
@@ -352,7 +352,7 @@ class album_image_url:
 
     def POST(self, album_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         try:
             i = web.input()
             image_url = i.get('image_url')
@@ -405,7 +405,7 @@ class artist_image_url:
 
     def POST(self, artist_id):
         if not (debugging or session.get('admin', False)):
-            raise web.seeother('/login')
+            raise web.seeother('login')
         try:
             i = web.input()
             image_url = i.get('image_url')

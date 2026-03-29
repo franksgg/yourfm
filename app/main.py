@@ -77,13 +77,13 @@ class plus():
 
     def GET(self):
         data.bew(1)
-        raise web.seeother("/")
+        raise web.seeother("index")
 
 
 class minus():
     def GET(self):
         data.bew(-1)
-        raise web.seeother("/")
+        raise web.seeother("index")
 
 
 
@@ -151,7 +151,7 @@ class Login:
 class Logout:
     def GET(self):
         session.logged_in = False
-        raise web.seeother('/')
+        raise web.seeother('index')
 
 
 class index(object):
@@ -258,7 +258,7 @@ class index(object):
         if debugging or session.get('logged_in', False):
             return self.display()
         else:
-            raise web.seeother('/login')
+            raise web.seeother('login')
 
 
 class playlist:
@@ -278,7 +278,7 @@ class playlist:
         if debugging or session.get('logged_in', False):
             return self.display()
         else:
-            raise web.seeother('/login')
+            raise web.seeother('login')
 
 
 # drop down to select artist
@@ -309,7 +309,7 @@ class artists:
         if debugging or session.get('logged_in', True):
             return self.display()
         else:
-            raise web.seeother('/login')
+            raise web.seeother('login')
 
     def POST(self):
         # Get form data
@@ -317,11 +317,11 @@ class artists:
 
         # Validate the form
         if not self.arform.validates():
-            return web.seeother('/')
+            return web.seeother('index')
         else:
             # Play the selected artist by ID
             data.play_artist_by_id(int(self.arform.d.Select))
-            return web.seeother('/')
+            return web.seeother('index')
 
 
 # drop down list to select a specific album
@@ -353,7 +353,7 @@ class albums(object):
         if debugging or session.get('logged_in', False):
             return self.display()
         else:
-            raise web.seeother('/login')
+            raise web.seeother('login')
 
     def POST(self):
         # Get form data
@@ -361,11 +361,11 @@ class albums(object):
 
         # Validate the form
         if not self.alform.validates():
-            return web.seeother('/')
+            return web.seeother('index')
         else:
             # Play the selected album by ID
             data.play_album_by_id(int(self.alform.d.Select))
-            return web.seeother('/')
+            return web.seeother('index')
 
 
 # drop down list to select a specific title
@@ -397,7 +397,7 @@ class titles(object):
         if debugging or session.get('logged_in', False):
             return self.display()
         else:
-            raise web.seeother('/login')
+            raise web.seeother('login')
 
     def POST(self):
         # Get form data
@@ -405,11 +405,11 @@ class titles(object):
 
         # Validate the form
         if not self.tiform.validates():
-            return web.seeother('/')
+            return web.seeother('index')
         else:
             # Play the selected title by ID
             data.play_title_by_id(int(self.tiform.d.Select))
-            return web.seeother('/')
+            return web.seeother('index')
 
 
 # Energy consumption graph page
@@ -573,14 +573,14 @@ class energy(object):
             return render.energy(header='Energy Consumption and Production', json_data=json_data, form=f,
                 start_date=display_start_date, end_date=display_end_date)
         else:
-            raise web.seeother('/login')
+            raise web.seeother('login')
 
     def POST(self):
         # Process form submission
         form_data = web.input()
 
         # Redirect to GET with form parameters
-        raise web.seeother(f'/energy?start_date={form_data.start_date}&end_date={form_data.end_date}')
+        raise web.seeother(f'energy?start_date={form_data.start_date}&end_date={form_data.end_date}')
 
 
 # Weather data graph page
@@ -678,14 +678,14 @@ class weather(object):
             return render.weather(header='Weather Data', json_data=json_data, form=f, start_date=display_start_date,
                 end_date=display_end_date)
         else:
-            raise web.seeother('/login')
+            raise web.seeother('login')
 
     def POST(self):
         # Process form submission
         form_data = web.input()
 
         # Redirect to GET with form parameters
-        raise web.seeother(f'/weather?start_date={form_data.start_date}&end_date={form_data.end_date}')
+        raise web.seeother(f'weather?start_date={form_data.start_date}&end_date={form_data.end_date}')
 
 
 if __name__ == "__main__":
