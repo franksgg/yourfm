@@ -32,8 +32,7 @@ class controls(object):
                        'random', 'search album', 'search artist', 'search title'], value='next'),
         # form.Button('Remove', value='minus'),
     )
-    if private:
-       sysform = form.Form(form.Dropdown('System', ['jetzt laden', 'automatisch laden', 'Klimatisierung starten']), )
+    sysform = form.Form(form.Dropdown('System', ['jetzt laden', 'automatisch laden', 'Klimatisierung starten']), )
 
     # decrement playlist pointer, then tell ices
     @staticmethod
