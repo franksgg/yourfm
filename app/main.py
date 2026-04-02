@@ -69,7 +69,7 @@ else:
     session = web.config._session
 
 # Initialize submodules
-controls.init_module(render, web.config._session, debugging)
+controls.init_module(render, web.config._session, debugging, private)
 edit.init_module(render, web.config._session, debugging, indexer)
 
 

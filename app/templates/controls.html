@@ -19,14 +19,15 @@ $if admin:
             </form>
         </div>
         <div class="bright">
-            <h3>System Control</h3>
-            <form name="sys" method="post">
-                $if not sysmenu.valid: <p class="error">Try again:</p>
-                <p class="full-width-padded">
-                    $:sysmenu.render()
-                </p>
-                <input type="submit" value="Execute"/>
-            </form>
+            $if sysmenu:
+                <h3>System Control</h3>
+                <form name="sys" method="post">
+                    $if not sysmenu.valid: <p class="error">Try again:</p>
+                    <p class="full-width-padded">
+                        $:sysmenu.render()
+                    </p>
+                    <input type="submit" value="Execute"/>
+                </form>
         </div>
     </div>
 $else:

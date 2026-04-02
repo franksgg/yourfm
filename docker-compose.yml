@@ -65,7 +65,7 @@ services:
       - ./app:/home/shiva/bin
       - ./indexer:/home/shiva/bin/indexer
       - opt-volume:/opt
-    command: sh -c "cp ~/app/ices ~/bin && cd ~/bin && ./ices -c /var/lib/firebird/data/ices.conf  && exec python main.py && tail -f /dev/null"
+    command: sh -c "cp ~/app/ices ~/bin && cd ~/bin && ./ices -c /var/lib/firebird/data/ices.conf  && exec gunicorn -b 0.0.0.0:8080 main:application"
     #command: sh -c "tail -f /dev/null"
 volumes:   # add this section
   opt-volume:    # does not need anything underneath this

@@ -47,8 +47,17 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
 
 2.  **Start the services**:
     ```bash
-    docker-compose up -d
+    docker-compose up firebird -d
+    docker-compose up indexer -d
     ```
+    wait for the indexer to finish indexing your music before starting the Icecast server:
+    ```bash
+    docker-compose up icecast -d
+    docker-compose up app -d
+    ```
+    **Note**: The `app` service will start streaming and create a web interface to show information about the actual track and control playback and view and edit metdadata.
+               
+
 
 3.  **Indexing your music**:
     The `indexer` service is configured to run `indexmedia.py` on startup, which scans your music library and populates the database. 

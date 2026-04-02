@@ -13,13 +13,15 @@ from web import form
 render = None
 session = None
 debugging = False
+private = False
 
 
-def init_module(r, s, d):
-    global render, session, debugging
+def init_module(r, s, d, p):
+    global render, session, debugging, private
     render = r
     session = s
     debugging = d
+    private = p
 
 
 class controls(object):
@@ -30,7 +32,8 @@ class controls(object):
                        'random', 'search album', 'search artist', 'search title'], value='next'),
         # form.Button('Remove', value='minus'),
     )
-    sysform = form.Form(form.Dropdown('System', ['jetzt laden', 'automatisch laden', 'Klimatisierung starten']), )
+    if private:
+       sysform = form.Form(form.Dropdown('System', ['jetzt laden', 'automatisch laden', 'Klimatisierung starten']), )
 
     # decrement playlist pointer, then tell ices
     @staticmethod
@@ -85,7 +88,10 @@ class controls(object):
         header = "Ices Web Interface Controls"
         # We need to access mform1 and sysform from index class
         menu = self.mform1
-        sysmenu = self.sysform
+        if private:
+            sysmenu = self.sysform
+        else:
+            sysmenu = None
         isadmin = debugging or session.get('admin', False)
         return render.controls(menu, sysmenu, header, isadmin)
 
