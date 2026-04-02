@@ -48,8 +48,8 @@ def ices_get_metadata():
         cure.execute('select actname() from actpos')
         # cure.execute('select first 1 path from tracks')
         d = cure.fetchone()
-    return mkmeta(d[0])
+    return mkmeta(d[0], 'utf-8').decode('utf-8')
 
 
 if __name__ == '__main__':
-    print(ices_get_next())
+    print(ices_get_metadata())
