@@ -21,7 +21,8 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
   - `indexmedia.py`: Script to scan and index music files.
   - `index.py`: Python module used by `ices` to fetch the next track.
   - `tools.py` / `connector.py`: Database connectivity helpers.
-- `docker-compose.yml`: Orchestration for all services.
+- `docker-compose.yml`: Main orchestration for production services.
+- `indexer.yml`: Configuration for the standalone indexer service.
 
 ## Requirements
 
@@ -48,19 +49,20 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
 2.  **Start the services**:
     ```bash
     docker-compose up firebird -d
-    docker-compose up indexer -d
+    docker-compose -f indexer.yml up -d
     ```
-    wait for the indexer to finish indexing your music before starting the Icecast server:
+    Wait for the indexer to finish indexing your music before starting the Icecast server:
     ```bash
     docker-compose up icecast -d
     docker-compose up app -d
     ```
-    **Note**: The `app` service will start streaming and create a web interface to show information about the actual track and control playback and view and edit metdadata.
+    **Note**: The `app` service will start streaming (using `ices`) and provides a web interface (via Nginx and Gunicorn) to show track information, control playback, and edit metadata.
+    The web interface is available at `http://localhost:8090`.
                
 
 
 3.  **Indexing your music**:
-    The `indexer` service is configured to run `indexmedia.py` on startup, which scans your music library and populates the database. 
+    The standalone `indexer` service (run via `indexer.yml`) is configured to run `indexmedia.py` on startup, which scans your music library and populates the database. 
     Logs are typically written to the location specified in `data/iceshake.ini`.
 
 4.  **Accessing the stream**:
@@ -69,8 +71,9 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
 
 ## Scripts & Entry Points
 
+- **`app` container**: Integrates Nginx as a reverse proxy for Gunicorn (web UI) and `ices` (audio streamer).
 - **`indexmedia.py`**: The primary entry point for scanning the filesystem, extracting tags (using `mutagen`, `mediafile`), and saving them to Firebird.
-- **`ices` (custom binary)**: Located in the indexer container, it's a version of ices0 compiled with Python support. It loads `index.py` to determine the playback order.
+- **`ices` (custom binary)**: Integrated within the `app` container, it's a version of ices0 compiled with Python support. It loads `index.py` to determine the playback order.
 - **`index.py`**: Contains `ices_get_next()` which queries the Firebird database for the next track to play.
 
 ## Configuration & Env Vars

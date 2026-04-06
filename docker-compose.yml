@@ -41,31 +41,19 @@ services:
     ports:
       - "8000:8000"
 
-
-
-  proxy:
-    image: nginx
-    volumes:
-      - type: bind
-        source: ./nginx/nginx.conf
-        target: /etc/nginx/conf.d/default.conf
-        read_only: true
-    ports:
-      - "8090:80"
-    depends_on:
-      - app
   app:
     build: ./app
     ports:
-      - "8080:8080"
+      - "8090:80"
 
     volumes:
+      - ./nginx/nginx.conf:/etc/nginx/sites-available/default
       - ./data:/var/lib/firebird/data
       - /var/data/music:/var/data/music
       - ./app:/home/shiva/bin
       - ./indexer:/home/shiva/bin/indexer
       - opt-volume:/opt
-    command: sh -c "cp ~/app/ices ~/bin && cd ~/bin && ./ices -c /var/lib/firebird/data/ices.conf  && exec gunicorn -b 0.0.0.0:8080 main:application"
+    command: sh -c "cp ~/app/ices ~/bin && cd ~/bin && ./ices -c /var/lib/firebird/data/ices.conf && sudo nginx && exec gunicorn -b 0.0.0.0:8080 main:application"
     #command: sh -c "tail -f /dev/null"
 volumes:   # add this section
   opt-volume:    # does not need anything underneath this

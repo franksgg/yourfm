@@ -21,7 +21,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get -y upgrade && apt-get install -y sudo \
     psmisc libmp3lame-dev libflac-dev libxml2-dev \
     libshout-dev libvorbis-dev libogg-dev libfaad-dev libshout-dev libpython3-dev libperl-dev \
-    libtommath1 gunicorn\
+    libtommath1 gunicorn nginx\
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
@@ -44,6 +44,7 @@ RUN useradd --create-home --shell /bin/bash  $USERNAME  && \
 # install dependencies
 RUN pip install --upgrade pip
 WORKDIR /home/$USERNAME/app
+RUN sed -i 's/www-data/shiva/g'  /etc/nginx/nginx.conf
 USER $USERNAME
 COPY requirements.txt .
 RUN pip install -r requirements.txt

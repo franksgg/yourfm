@@ -1,0 +1,13 @@
+services:
+  indexer:
+    build:
+      context: ./indexer
+      dockerfile: dockerfile-python
+    volumes:
+       - ./data:/var/lib/firebird/data
+       - /var/data/music:/var/data/music
+       - ./app:/home/shiva/bin
+       - opt-volume:/opt
+volumes:   # add this section
+  opt-volume:    # does not need anything underneath this
+
