@@ -31,8 +31,9 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
 ## Requirements
 
 - **Docker** and **Docker Compose**.
-- A music library located on the host (defaults to `/var/data/music`).
-- An API key for Discogs for enhanced metadata indexing.
+- A music library accessible on the host (defaults to `/var/data/music`).
+- An API key for Discogs for metadata indexing.
+  (Get one here: https://www.discogs.com/developers/)
 
 ## Downloading
 1. git clone https://github.com/yourfm/yourfm.git
@@ -43,11 +44,13 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
 ## Setup & Run
 
 1.  **Configure the environment**:
-    - Rename or copy `data/iceshake.ini.dist` to `data/iceshake.ini` 
-    - Rename or copy `ddl/iceshake.ddl` to `ddl/iceshake.sql`
+   
     - Review and update paths in iceshake.ini and add your Discogs API key.
-    - (Optional) add or change the iusers entries at the end of 'ddl/iceshake.sql' (these are the users that will be allowed to access the web interface).
-       Users with the 'iadmin' flag set to 1 will be able to control playback via the web interface.   
+    - (Optional but highly recommended) add or change the iusers entries at the end of 'ddl/iceshake.sql'.
+      (These are the users that will be allowed to access the web interface. 
+       Users with the 'iadmin' flag set to 1 will be able to control playback and edit metadata via
+       the web interface.)   
+    
     - Ensure your music library is available at `/var/data/music` or update the volume mapping in `docker-compose.yml`.
 
 2.  **Start the services**:
