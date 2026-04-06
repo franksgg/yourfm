@@ -106,3 +106,4 @@ This project includes components under different licenses:
 - `icecast-kh-docker`: See `icecast-kh-docker/LICENSE`.
 - `indexer`: See `indexer/LICENSE`.
 - Project Root: See `LICENSE` in the root directory.
+
