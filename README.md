@@ -2,7 +2,8 @@
 
 Personal internet radio station powered by Icecast, Firebird SQL, and a custom Python-driven ices0 streamer.
 
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/9f8b6ca7-320e-4d5f-bef6-c8b71a465020" />
+
+<img width="1920" height="1200" alt="public" src="https://github.com/user-attachments/assets/857fb1cc-6d21-4639-aceb-3c87bcc4ba1c" />
 
 
 ## Overview
