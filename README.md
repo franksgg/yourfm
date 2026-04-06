@@ -1,8 +1,8 @@
 # yourfm
 
 Personal internet radio station powered by Icecast, Firebird SQL, and a custom Python-driven ices0 streamer.
-<img width="1920" height="1200" alt="private" src="https://github.com/user-attachments/assets/97d16a3c-176b-4a75-89e6-67afeb9dba13" />
 
+<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/9f8b6ca7-320e-4d5f-bef6-c8b71a465020" />
 
 
 ## Overview
