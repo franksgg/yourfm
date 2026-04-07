@@ -45,7 +45,7 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
 
 1.  **Configure the environment**:
    
-    - Review and update paths and change passwords in .env and add your Discogs API key.
+    - Review and update paths and change passwords in `.env` and add your Discogs API key.
         
     - Ensure your music library is available at `/var/data/music` or update the volume mapping in `docker-compose.yml`.
 
