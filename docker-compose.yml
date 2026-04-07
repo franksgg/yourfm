@@ -3,10 +3,10 @@ services:
     image: firebirdsql/firebird
     restart: always
     environment:
-      - FIREBIRD_ROOT_PASSWORD=masterkey
-      - FIREBIRD_USER=shiva
-      - FIREBIRD_PASSWORD=shiva
-      - FIREBIRD_DATABASE=iceshake.fdb
+      - FIREBIRD_ROOT_PASSWORD=${FIREBIRD_ROOT_PASSWORD:-masterkey}
+      - FIREBIRD_USER=${FIREBIRD_USER:-shiva}
+      - FIREBIRD_PASSWORD=${FIREBIRD_PASSWORD:-shiva}
+      - FIREBIRD_DATABASE=${FIREBIRD_DATABASE:-iceshake.fdb}
       - FIREBIRD_DATABASE_DEFAULT_CHARSET=UTF8
       ##- FIREBIRD_CONF_DataTypeCompatibility=3.0
 
@@ -26,14 +26,11 @@ services:
       - ./icecast-kh-docker/docker-entrypoint.sh:/home/icecast/docker-entrypoint.sh
     restart: unless-stopped
     environment:
-      - IC_LOCATION=Germany
-      # - IC_ADMIN_EMAIL=
-      # - IC_MAX_LISTENERS=
-      # - IC_MAX_SOURCES=
-      - IC_SOURCE_PASSWORD=hackme
-      # - IC_RELAY_PASSWORD=
-      - IC_ADMIN_PASSWORD=hackme
-      - IC_HOSTNAME=localhost
+      - IC_LOCATION=${IC_LOCATION:-Germany}
+      - IC_ADMIN_EMAIL=${IC_ADMIN_EMAIL:-admin@localhost}
+      - IC_SOURCE_PASSWORD=${IC_SOURCE_PASSWORD:-hackme}
+      - IC_ADMIN_PASSWORD=${IC_ADMIN_PASSWORD:-hackme}
+      - IC_HOSTNAME=${IC_HOSTNAME:-localhost}
       # - IC_MOUNT_PASSWORD=
       #- IC_RELAY_SERVER=stream.urdt.lv
     entrypoint: /home/icecast/docker-entrypoint.sh
@@ -53,7 +50,22 @@ services:
       - ./app:/home/shiva/bin
       - ./indexer:/home/shiva/bin/indexer
       - opt-volume:/opt
-    command: sh -c "cp ~/app/ices ~/bin && cd ~/bin && ./ices -c /var/lib/firebird/data/ices.conf && sudo nginx && exec gunicorn -b 0.0.0.0:8080 main:application"
+    environment:
+      - FIREBIRD_ROOT_PASSWORD=${FIREBIRD_ROOT_PASSWORD:-masterkey}
+      - FIREBIRD_USER=${FIREBIRD_USER:-shiva}
+      - FIREBIRD_PASSWORD=${FIREBIRD_PASSWORD:-shiva}
+      - APP_USER=${APP_USER:-shiva}
+      - APP_PASSWORD=${APP_PASSWORD:-shiva}
+    command: >
+      sh -c "
+      cp ~/app/ices ~/bin && 
+      cd ~/bin && 
+      envsubst < /var/lib/firebird/data/ices.conf > /tmp/ices.conf &&
+      ./ices -c /tmp/ices.conf && 
+      sudo nginx && 
+      ./init.sh &&
+       /opt/firebird/bin/isql -user SYSDBA -pass ${FIREBIRD_ROOT_PASSWORD:-masterkey} -i /home/shiva/bin/init.sql firebird:/var/lib/firebird/data/iceshake.fdb &&
+      exec gunicorn -b 0.0.0.0:8080 main:application"
     #command: sh -c "tail -f /dev/null"
 volumes:   # add this section
   opt-volume:    # does not need anything underneath this

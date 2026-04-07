@@ -1,0 +1,13 @@
+UPDATE OR INSERT INTO IUSERS (
+	ID,
+	NAME,
+	PASSWORD,
+	IADMIN
+) VALUES (
+	1,
+	'APP_USER',
+	'APP_PASSWORD',
+	1
+);
+commit;
+

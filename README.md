@@ -45,12 +45,8 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
 
 1.  **Configure the environment**:
    
-    - Review and update paths in iceshake.ini and add your Discogs API key.
-    - (Optional but highly recommended) add or change the iusers entries at the end of 'ddl/iceshake.sql'.
-      (These are the users that will be allowed to access the web interface. 
-       Users with the 'iadmin' flag set to 1 will be able to control playback and edit metadata via
-       the web interface.)   
-    
+    - Review and update paths and change passwords in .env and add your Discogs API key.
+        
     - Ensure your music library is available at `/var/data/music` or update the volume mapping in `docker-compose.yml`.
 
 2.  **Start the services**:
@@ -86,20 +82,29 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
 ## Configuration & Env Vars
 
 ### `docker-compose.yml` Environment Variables:
+All environment variables can be managed in a `.env` file in the project root. See `.env.dist` for a template.
+
 - **Firebird**:
   - `FIREBIRD_USER`: default `shiva`
   - `FIREBIRD_PASSWORD`: default `shiva`
   - `FIREBIRD_DATABASE`: default `iceshake.fdb`
+  - `FIREBIRD_ROOT_PASSWORD`: default `masterkey`
 - **Icecast**:
   - `IC_SOURCE_PASSWORD`: Password for ices to connect.
   - `IC_ADMIN_PASSWORD`: Password for the Icecast web interface.
+  - `IC_HOSTNAME`: default `localhost`
+  - `IC_LOCATION`: default `Germany`
+  - `IC_ADMIN_EMAIL`: default `admin@localhost`
+- **Indexer**:
+  - `DISCOGS_API_KEY`: API key for Discogs.
+  - `MUSIC_LIBRARY`: Root of the music library (defaults to `/var/data/music`).
 
 ### `data/iceshake.ini`:
-- `[Connection]`: Database connection details.
+The settings in `iceshake.ini` can be overridden by environment variables defined in `.env`.
+- `[Connection]`: Database connection details (overridden by `FIREBIRD_*` vars).
 - `[Indexer]`: 
-  - `basedir`: Root of the music library.
-  - `dirs`: Subdirectories to scan.
-  - `discogs`: API key for Discogs.
+  - `basedir`: Root of the music library (overridden by `MUSIC_LIBRARY`).
+  - `discogs`: API key for Discogs (overridden by `DISCOGS_API_KEY`).
   
 
 ## Tests
