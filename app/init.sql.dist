@@ -5,8 +5,8 @@ UPDATE OR INSERT INTO IUSERS (
 	IADMIN
 ) VALUES (
 	1,
-	'frank',
-	'mottezx81',
+	'APP_USER',
+	'APP_PASSWORD',
 	1
 );
 commit;
