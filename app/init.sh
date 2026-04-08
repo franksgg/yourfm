@@ -5,7 +5,7 @@ INIT_FILE="init.sql"
 # env
 #exec tail -f /dev/null
 
-cp $DEST_FILE $INIT_FILE
+cp $DIST_FILE $INIT_FILE
 
 if [ -n "$APP_USER" ]; then
 sed -i -e "s/APP_USER/$APP_USER/g" $INIT_FILE
