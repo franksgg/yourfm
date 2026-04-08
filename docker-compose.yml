@@ -1,3 +1,4 @@
+name: myfm
 services:
   firebird:
     image: firebirdsql/firebird
@@ -27,6 +28,7 @@ services:
     restart: unless-stopped
     environment:
       - IC_LOCATION=${IC_LOCATION:-Germany}
+      - IC_ADMIN_USER=${IC_ADMIN_USER:-admin}
       - IC_ADMIN_EMAIL=${IC_ADMIN_EMAIL:-admin@localhost}
       - IC_SOURCE_PASSWORD=${IC_SOURCE_PASSWORD:-hackme}
       - IC_ADMIN_PASSWORD=${IC_ADMIN_PASSWORD:-hackme}
@@ -51,20 +53,25 @@ services:
       - ./indexer:/home/shiva/bin/indexer
       - opt-volume:/opt
     environment:
+      - IC_ADMIN_USER=${IC_ADMIN_USER:-admin}
+      - IC_ADMIN_PASSWORD=${IC_ADMIN_PASSWORD:-hackme}
+      - IC_SOURCE_PASSWORD=${IC_SOURCE_PASSWORD:-hackme}
       - FIREBIRD_ROOT_PASSWORD=${FIREBIRD_ROOT_PASSWORD:-masterkey}
       - FIREBIRD_USER=${FIREBIRD_USER:-shiva}
       - FIREBIRD_PASSWORD=${FIREBIRD_PASSWORD:-shiva}
       - APP_USER=${APP_USER:-shiva}
       - APP_PASSWORD=${APP_PASSWORD:-shiva}
+      - FIREBIRD_DATABASE=${FIREBIRD_DATABASE:-iceshake.fdb}
+
     command: >
       sh -c "
       cp ~/app/ices ~/bin && 
       cd ~/bin && 
       envsubst < /var/lib/firebird/data/ices.conf > /tmp/ices.conf &&
+      envsubst < /var/lib/firebird/data/iceshake.ini.dist > /var/lib/firebird/data/iceshake.ini &&
       ./ices -c /tmp/ices.conf && 
       sudo nginx && 
-      ./init.sh &&
-       /opt/firebird/bin/isql -user SYSDBA -pass ${FIREBIRD_ROOT_PASSWORD:-masterkey} -i /home/shiva/bin/init.sql firebird:/var/lib/firebird/data/iceshake.fdb &&
+      ./init.sh &&     
       exec gunicorn -b 0.0.0.0:8080 main:application"
     #command: sh -c "tail -f /dev/null"
 volumes:   # add this section

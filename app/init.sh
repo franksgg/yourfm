@@ -15,5 +15,6 @@ if [ -n "$APP_PASSWORD" ]; then
    sed -i -e "s/APP_PASSWORD/$APP_PASSWORD/g" $INIT_FILE
 fi
 
-/opt/firebird/bin/isql -user SYSDBA -pass ${FIREBIRD_ROOT_PASSWORD:-masterkey} -i /home/shiva/bin/init.sql firebird:/var/lib/firebird/data/iceshake.fdb
+echo /opt/firebird/bin/isql -user SYSDBA -pass ${FIREBIRD_ROOT_PASSWORD:-masterkey} -i /home/shiva/bin/init.sql firebird:/var/lib/firebird/data/${FIREBIRD_DATABASE}
+/opt/firebird/bin/isql -user SYSDBA -pass ${FIREBIRD_ROOT_PASSWORD:-masterkey} -i /home/shiva/bin/init.sql firebird:/var/lib/firebird/data/${FIREBIRD_DATABASE}
 #

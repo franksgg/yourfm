@@ -1,13 +1,28 @@
+name: indexer
 services:
   indexer:
     build:
       context: ./indexer
       dockerfile: dockerfile-python
+    environment:
+      - IC_ADMIN_USER=${IC_ADMIN_USER:-admin}
+      - IC_ADMIN_PASSWORD=${IC_ADMIN_PASSWORD:-hackme}
+      - IC_SOURCE_PASSWORD=${IC_SOURCE_PASSWORD:-hackme}
+      - FIREBIRD_ROOT_PASSWORD=${FIREBIRD_ROOT_PASSWORD:-masterkey}
+      - FIREBIRD_USER=${FIREBIRD_USER:-shiva}
+      - FIREBIRD_PASSWORD=${FIREBIRD_PASSWORD:-shiva}
+      - APP_USER=${APP_USER:-shiva}
+      - APP_PASSWORD=${APP_PASSWORD:-shiva}
+      - FIREBIRD_DATABASE=${FIREBIRD_DATABASE:-iceshake.fdb}
     volumes:
        - ./data:/var/lib/firebird/data
        - /var/data/music:/var/data/music
        - ./app:/home/shiva/bin
        - opt-volume:/opt
+    command: >
+      sh -c "
+      envsubst < /var/lib/firebird/data/iceshake.ini.dist > /var/lib/firebird/data/iceshake.ini &&
+      exec python /home/shiva/app/indexmedia.py"
 volumes:   # add this section
   opt-volume:    # does not need anything underneath this
 
