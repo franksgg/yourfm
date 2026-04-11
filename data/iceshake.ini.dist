@@ -28,6 +28,7 @@ dirs: tidal,alben,various
 
 ;discogs api key
 discogs: ${DISCOGS_API_KEY}
+discogsagent=${DISCOGS_USER_AGENT}
 ;lastfm api key (not used)
 LASTFM_API_KEY:
 ;comma separated list of file extensions to index 1=flac,2=mp3,3=m4a,4=ogg,5=wma,6=wav
