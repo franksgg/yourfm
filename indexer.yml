@@ -32,6 +32,7 @@ services:
       - APP_PASSWORD=${APP_PASSWORD:-shiva}
       - FIREBIRD_DATABASE=${FIREBIRD_DATABASE:-iceshake.fdb}
       - DISCOGS_API_KEY=${DISCOGS_API_KEY:-none}
+      - DISCOGS_USER_AGENT=${DISCOGS_USER_AGENT:-'mydoagent/0.07'}
     volumes:
        - ./data:/var/lib/firebird/data
        - /var/data/music:/var/data/music
