@@ -1,0 +1,20 @@
+name: myfm
+services:
+  firebird:
+    image: firebirdsql/firebird:latest
+    restart: always
+    environment:
+      - FIREBIRD_ROOT_PASSWORD=${FIREBIRD_ROOT_PASSWORD:-masterkey}
+      - FIREBIRD_USER=${FIREBIRD_USER:-shiva}
+      - FIREBIRD_PASSWORD=${FIREBIRD_PASSWORD:-shiva}
+      - FIREBIRD_DATABASE=${FIREBIRD_DATABASE:-iceshake.fdb}
+      - FIREBIRD_DATABASE_DEFAULT_CHARSET=UTF8
+    volumes:
+      - ./data:/var/lib/firebird/data
+      - ./ddl:/docker-entrypoint-initdb.d/
+      - opt-volume:/opt
+    ports:
+      - "30050:3050"
+
+volumes:
+  opt-volume:

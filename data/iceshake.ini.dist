@@ -1,7 +1,7 @@
 [Connection]
 ;firebird connection string
 host: firebird
-port: 3050
+port: 30050
 ;firebird database name
 database: /var/lib/firebird/data/${FIREBIRD_DATABASE}
 ;firebird user

@@ -1,22 +1,7 @@
 name: myfm
+include:
+  - shared.yml
 services:
-  firebird:
-    image: firebirdsql/firebird
-    restart: always
-    environment:
-      - FIREBIRD_ROOT_PASSWORD=${FIREBIRD_ROOT_PASSWORD:-masterkey}
-      - FIREBIRD_USER=${FIREBIRD_USER:-shiva}
-      - FIREBIRD_PASSWORD=${FIREBIRD_PASSWORD:-shiva}
-      - FIREBIRD_DATABASE=${FIREBIRD_DATABASE:-iceshake.fdb}
-      - FIREBIRD_DATABASE_DEFAULT_CHARSET=UTF8
-      ##- FIREBIRD_CONF_DataTypeCompatibility=3.0
-
-    volumes:
-      - ./data:/var/lib/firebird/data
-      - ./ddl:/docker-entrypoint-initdb.d/
-      - opt-volume:/opt
-    ports:
-      - "30050:3050"
 
   icecast:
     build: ./icecast-kh-docker
@@ -44,7 +29,8 @@ services:
     build: ./app
     ports:
       - "8090:80"
-
+    depends_on:
+      - firebird
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/sites-available/default
       - ./data:/var/lib/firebird/data
@@ -73,7 +59,5 @@ services:
       sudo nginx && 
       ./init.sh &&     
       exec gunicorn -b 0.0.0.0:8080 main:application"
-    #command: sh -c "tail -f /dev/null"
-volumes:   # add this section
-  opt-volume:    # does not need anything underneath this
+    # command: sh -c "tail -f /dev/null"
 
