@@ -54,10 +54,9 @@ Personal internet radio station powered by Icecast, Firebird SQL, and a custom P
     docker-compose up firebird -d
     docker-compose -f indexer.yml up -d
     ```
-    Wait for the indexer to finish indexing your music before starting the Icecast server:
+    Wait for the indexer to finish indexing your music before starting the Icecast server and web interface:
     ```bash
-    docker-compose up icecast -d
-    docker-compose up app -d
+    docker-compose up
     ```
     **Note**: The `app` service will start streaming (using `ices`) and provides a web interface (via Nginx and Gunicorn) to show track information, control playback, and edit metadata.
     The web interface is available at `http://localhost:8090`.
