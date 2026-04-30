@@ -12,7 +12,7 @@ import threading
 import time
 from base64 import decodebytes, encodebytes
 from copy import deepcopy
-from hashlib import sha1
+from hashlib import sha256
 
 from . import utils
 from . import webapi as web
@@ -175,7 +175,7 @@ class Session:
             secret_key = self._config.secret_key
 
             hashable = f"{rand}{now}{utils.safestr(web.ctx.ip)}{secret_key}"
-            session_id = sha1(hashable.encode("utf-8")).hexdigest()
+            session_id = sha256(hashable.encode("utf-8")).hexdigest()
             if session_id not in self.store:
                 break
         return session_id
