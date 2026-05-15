@@ -48,6 +48,7 @@ services:
       - APP_USER=${APP_USER:-shiva}
       - APP_PASSWORD=${APP_PASSWORD:-shiva}
       - FIREBIRD_DATABASE=${FIREBIRD_DATABASE:-iceshake.fdb}
+      - TZ=${TZ:-Europe/Berlin}
 
     command: >
       sh -c "
