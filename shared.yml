@@ -1,7 +1,7 @@
 name: myfm
 services:
   firebird:
-    image: firebirdsql/firebird:latest
+    image: firebirdsql/firebird:6-snapshot-trixie
     restart: always
     environment:
       - FIREBIRD_ROOT_PASSWORD=${FIREBIRD_ROOT_PASSWORD:-masterkey}

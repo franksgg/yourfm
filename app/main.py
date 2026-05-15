@@ -47,6 +47,7 @@ config = tools.get_config()
 
 icecastserver=config.get('server', 'url')
 private = config.getboolean('server', 'private', fallback=False)
+secretkey = config.get('server', 'secretkey',fallback='fLjUfxqXtfNoIldA0A0J')
 # Database connection
 connection = tools.get_connector()
 con = connection.getconnection()
@@ -57,6 +58,7 @@ indexer = indexmedia.Indexer()
 
 # Session configuration
 web.config.session_parameters['timeout'] = 2678400
+web.config.session_parameters['secret_key'] = secretkey
 web.config.session_parameters['samesite'] = 'Strict'
 web.config.session_parameters['secure'] = True
 web.config.session_parameters['logged_in'] = False

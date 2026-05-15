@@ -18,6 +18,7 @@ url=http://localhost:8000/
 admin_user=admin
 admin_password=${IC_ADMIN_PASSWORD}
 private=False
+secret_key=${SECRET_KEY}
 
 [Indexer]
 logfile=/var/data/music/indexer.log
